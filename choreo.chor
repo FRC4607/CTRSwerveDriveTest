@@ -1,0 +1,38 @@
+{
+    "version": "v0.1.1",
+    "robotConfiguration": {
+        "mass": 45,
+        "rotationalInertia": 6,
+        "wheelMaxTorque": 2,
+        "wheelMaxVelocity": 70,
+        "wheelbase": 0.622,
+        "trackWidth": 0.622,
+        "bumperLength": 0.9,
+        "bumperWidth": 0.9,
+        "wheelRadius": 0.0508
+    },
+    "paths": {
+        "NewPath": {
+            "waypoints": [],
+            "trajectory": [],
+            "constraints": [
+                {
+                    "scope": [
+                        "first"
+                    ],
+                    "type": "WptZeroVelocity",
+                    "uuid": "41ae1ae6-d7f2-4591-8170-50b17cba0c52"
+                },
+                {
+                    "scope": [
+                        "last"
+                    ],
+                    "type": "WptZeroVelocity",
+                    "uuid": "339303dc-0da3-4d8e-8aaf-acff3d39f297"
+                }
+            ],
+            "usesControlIntervalGuessing": true,
+            "defaultControlIntervalCount": 40
+        }
+    }
+}
