@@ -6,11 +6,21 @@ import frc.robot.subsystems.TurnMotorCharacterizationSubsystem;
 
 public class TurnMotorKSTest extends Command {
     private enum State {
-        INIT,
-        REMOVE_BACKLASH,
-        WAIT_FOR_STOP,
-        WAIT_FOR_START,
-        TERMINATE
+        INIT("#000000"),
+        REMOVE_BACKLASH("#888888"),
+        WAIT_FOR_STOP("#FF0000"),
+        WAIT_FOR_START("#00FF00"),
+        TERMINATE("#FFFFFF");
+
+        private final String hexID;
+
+        private State(String hexID) {
+            this.hexID = hexID;
+        }
+
+        public String getHexValue() {
+            return hexID;
+        }
     }
 
     private State m_state = State.INIT;
@@ -30,6 +40,8 @@ public class TurnMotorKSTest extends Command {
 
     @Override
     public void execute() {
+        SmartDashboard.putString("Test State", m_state.toString());
+        SmartDashboard.putString("Test State Color", m_state.getHexValue());
         switch (m_state) {
             case INIT: { // Startup, remove any backlash with a high value
                 m_pos = m_motor.getPosition();
@@ -59,7 +71,7 @@ public class TurnMotorKSTest extends Command {
                     m_loopCounter++;
                 }
                 if (m_loopCounter == 50) { // If 50 loops have had no movement
-                    double halfDiff = (m_current - m_currentPrev) / 2.0;
+                    double halfDiff = Math.abs(m_current - m_currentPrev) / 2.0;
                     m_currentPrev = m_current;
                     m_current -= halfDiff; // Subtract half the difference to apply less torque
                     m_loopCounter = 0; // Reset the loop counter
@@ -81,8 +93,8 @@ public class TurnMotorKSTest extends Command {
                     break;
                 }
                 if (m_loopCounter == 50) { // If 50 loops have had no movement
-                    double halfDiff = (m_current - m_currentPrev) / 2.0;
-                    if (Math.abs(halfDiff) < 0.005) { // If the difference between measurements is less than 0.01, stop trying to move and terminate
+                    double halfDiff = Math.abs(m_current - m_currentPrev) / 2.0;
+                    if (Math.abs(halfDiff) < 0.0005) { // If the difference between measurements is less than 0.001, stop trying to move and terminate
                         m_state = State.TERMINATE;
                         m_motor.setCurrent(0);
                     }
@@ -109,7 +121,7 @@ public class TurnMotorKSTest extends Command {
     public void end(boolean i) {
         m_motor.setCurrent(0);
         SmartDashboard.putNumber("kS Test Result", m_current);
-        
+
         m_state = State.INIT;
 
         m_pos = 0;
@@ -117,5 +129,8 @@ public class TurnMotorKSTest extends Command {
         m_current = 0;
 
         m_loopCounter = 0;
+
+        SmartDashboard.putString("Test State", m_state.toString());
+        SmartDashboard.putString("Test State Color", m_state.getHexValue());
     }
 }

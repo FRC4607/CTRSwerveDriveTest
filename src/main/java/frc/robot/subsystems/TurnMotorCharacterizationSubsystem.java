@@ -1,12 +1,13 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.BaseStatusSignal;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,7 +21,7 @@ public class TurnMotorCharacterizationSubsystem extends SubsystemBase {
 
     public TurnMotorCharacterizationSubsystem(int id, String canbus) {
         m_motor = new TalonFX(id, canbus);
-        m_motor.getConfigurator().apply(new TalonFXConfiguration()); // Factory default
+        m_motor.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake))); // Factory default except for brake mode
         m_motor.optimizeBusUtilization();
         m_encoder = new CANcoder(id, canbus);
         m_encoder.getConfigurator().apply(new CANcoderConfiguration()); // Factory default
