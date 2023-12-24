@@ -11,6 +11,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.TurnMotorKSTest;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.TurnMotorCharacterizationSubsystem;
+import frc.robot.util.swerve.CharacterizeKSRequest;
 
 public class RobotContainer {
   private static final double MaxSpeed = 5.75; // 6 meters per second desired top speed
@@ -26,9 +28,11 @@ public class RobotContainer {
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController joystick = new CommandXboxController(0); // My joystick
 
-  private final TurnMotorCharacterizationSubsystem m_motor = new TurnMotorCharacterizationSubsystem(3, "kachow");
-  private final TurnMotorKSTest m_command = new TurnMotorKSTest(m_motor);
-  //private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  //private final TurnMotorCharacterizationSubsystem m_motor = new TurnMotorCharacterizationSubsystem(18, "kachow");
+  //private final TurnMotorKSTest m_command = new TurnMotorKSTest(m_motor);
+  private final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+
+  private final CharacterizeKSRequest m_request = new CharacterizeKSRequest();
 
   /*private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -57,7 +61,8 @@ public class RobotContainer {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     drivetrain.registerTelemetry(logger::telemeterize);*/
-    joystick.a().onTrue(m_command.onlyIf(() -> !m_command.isScheduled()));
+    //SmartDashboard.putData("Run Test", m_command.onlyIf(() -> !m_command.isScheduled()));
+    drivetrain.setDefaultCommand(drivetrain.applyRequest(() -> m_request));
   }
 
   public RobotContainer() {

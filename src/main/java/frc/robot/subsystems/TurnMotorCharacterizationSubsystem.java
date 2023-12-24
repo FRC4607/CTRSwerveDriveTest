@@ -4,6 +4,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -16,6 +17,7 @@ public class TurnMotorCharacterizationSubsystem extends SubsystemBase {
     private final CANcoder m_encoder;
 
     private final TorqueCurrentFOC m_currentReq = new TorqueCurrentFOC(0).withMaxAbsDutyCycle(0.5).withUpdateFreqHz(1000);
+    private final NeutralOut m_neutral = new NeutralOut().withUpdateFreqHz(1000);
 
     private final StatusSignal<Double> m_encoderPosition;
 
@@ -35,6 +37,9 @@ public class TurnMotorCharacterizationSubsystem extends SubsystemBase {
         m_motor.setControl(m_currentReq);
     }
 
+    public void setNeutral() {
+        m_motor.setControl(m_neutral);
+    }
     public double getPosition() {
         return m_encoderPosition.waitForUpdate(0.02).getValueAsDouble();
     }
