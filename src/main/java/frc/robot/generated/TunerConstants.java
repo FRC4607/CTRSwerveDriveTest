@@ -8,7 +8,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.ClosedLoopOutputType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackType;
 
 import edu.wpi.first.math.util.Units;
-import frc.robot.CommandSwerveDrivetrain;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class TunerConstants {
     // Both sets of gains need to be tuned to your individual robot.
@@ -16,13 +16,13 @@ public class TunerConstants {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
-        .withKP(0).withKI(0).withKD(0)
-        .withKS(0).withKV(0).withKA(0);
+        .withKP(300).withKI(0).withKD(25)
+        .withKS(2.885833333).withKV(0).withKA(0);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
-        .withKP(0).withKI(0).withKD(0)
-        .withKS(0).withKV(0).withKA(0);
+        .withKP(7).withKI(0).withKD(0)
+        .withKS(2.447242424).withKV(0).withKA(0);
 
     // The closed-loop output type to use for the steer motors;
     // This affects the PID/FF gains for the steer motors
@@ -33,11 +33,11 @@ public class TunerConstants {
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private static final double kSlipCurrentA = 300.0;
+    private static final double kSlipCurrentA = 100; // Assumes a 40lb robot, g=9.81 m/s^2, Cf=0.9, and kT is 0.0192 (ReCalc's kT value for a FOC Falcon 500)
 
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
-    private static final double kSpeedAt12VoltsMps = 5.27;
+    public static final double kSpeedAt12VoltsMps = Units.feetToMeters(17.3); // From SDS's website for a FOC Falcon with L3 gearing
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot

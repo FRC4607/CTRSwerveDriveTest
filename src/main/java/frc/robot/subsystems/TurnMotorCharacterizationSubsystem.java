@@ -16,14 +16,16 @@ public class TurnMotorCharacterizationSubsystem extends SubsystemBase {
     private final TalonFX m_motor;
     private final CANcoder m_encoder;
 
-    private final TorqueCurrentFOC m_currentReq = new TorqueCurrentFOC(0).withMaxAbsDutyCycle(0.5).withUpdateFreqHz(1000);
+    final TorqueCurrentFOC m_currentReq = new TorqueCurrentFOC(0).withMaxAbsDutyCycle(0.5).withUpdateFreqHz(1000);
     private final NeutralOut m_neutral = new NeutralOut().withUpdateFreqHz(1000);
 
-    private final StatusSignal<Double> m_encoderPosition;
+    final StatusSignal<Double> m_encoderPosition;
 
     public TurnMotorCharacterizationSubsystem(int id, String canbus) {
         m_motor = new TalonFX(id, canbus);
         m_motor.getConfigurator().apply(new TalonFXConfiguration().withMotorOutput(new MotorOutputConfigs().withNeutralMode(NeutralModeValue.Brake))); // Factory default except for brake mode
+        m_motor.getVelocity().setUpdateFrequency(1000);
+        m_motor.getClosedLoopError().setUpdateFrequency(1000);
         m_motor.optimizeBusUtilization();
         m_encoder = new CANcoder(id, canbus);
         m_encoder.getConfigurator().apply(new CANcoderConfiguration()); // Factory default
